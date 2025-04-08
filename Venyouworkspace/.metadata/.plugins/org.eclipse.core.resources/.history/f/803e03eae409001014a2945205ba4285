@@ -1,0 +1,5 @@
+package com.venyou.service.impl;
+
+public class InvoiceService implements com.venyou.service.InvoiceService {
+
+}

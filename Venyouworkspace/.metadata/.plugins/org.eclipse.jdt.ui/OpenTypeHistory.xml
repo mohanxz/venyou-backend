@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<typeInfoHistroy>
+    <typeInfo handle="=venyou-backend/C:\/Users\/keert\/.m2\/repository\/org\/springframework\/data\/spring-data-jpa\/3.4.4\/spring-data-jpa-3.4.4.jar=/maven.pomderived=/true=/=/maven.groupId=/org.springframework.data=/=/maven.artifactId=/spring-data-jpa=/=/maven.version=/3.4.4=/=/maven.scope=/compile=/=/maven.pomderived=/true=/=/org.eclipse.jst.component.nondependency=/=/&lt;org.springframework.data.jpa.repository(JpaRepository.class[JpaRepository" modifiers="1537" timestamp="1742899540460"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{HallService.java[HallService" modifiers="513" timestamp="1742951845507"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{UserService.java[UserService" modifiers="513" timestamp="1742951961389"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.repository{HallPricingRepository.java[HallPricingRepository" modifiers="513" timestamp="1742925021635"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{HallPricingService.java[HallPricingService" modifiers="513" timestamp="1742952070013"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{BookingService.java[BookingService" modifiers="513" timestamp="1742952277218"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{TransactionService.java[TransactionService" modifiers="513" timestamp="1742953358746"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.repository{ReviewRepository.java[ReviewRepository" modifiers="513" timestamp="1742924728945"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{ReviewService.java[ReviewService" modifiers="513" timestamp="1742953411603"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{RefundRequestService.java[RefundRequestService" modifiers="513" timestamp="1742953501426"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{NotificationService.java[NotificationService" modifiers="513" timestamp="1742953597616"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.repository{InvoiceRepository.java[InvoiceRepository" modifiers="513" timestamp="1742924768520"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{InvoiceService.java[InvoiceService" modifiers="513" timestamp="1742953615446"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{HallCategoryService.java[HallCategoryService" modifiers="513" timestamp="1742953670721"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{BookingAdvanceDetailsService.java[BookingAdvanceDetailsService" modifiers="513" timestamp="1742954257697"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{CancellationService.java[CancellationService" modifiers="513" timestamp="1742954322542"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{CustomerSupportService.java[CustomerSupportService" modifiers="513" timestamp="1742954408738"/>
+    <typeInfo handle="=venyou-backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.venyou.service{HallAvailabilityService.java[HallAvailabilityService" modifiers="513" timestamp="1742954467811"/>
+</typeInfoHistroy>

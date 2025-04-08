@@ -1,0 +1,5 @@
+package com.venyou.service.impl;
+
+public class OwnerServiceImpl {
+
+}

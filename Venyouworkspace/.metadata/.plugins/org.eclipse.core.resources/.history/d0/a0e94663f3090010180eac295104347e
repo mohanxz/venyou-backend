@@ -1,0 +1,5 @@
+package com.venyou.controller;
+
+public class BookingAdvanceDetailsController {
+
+}

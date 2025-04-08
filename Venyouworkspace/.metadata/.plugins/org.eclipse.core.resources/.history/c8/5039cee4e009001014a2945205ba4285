@@ -1,0 +1,7 @@
+package com.venyou.service.impl;
+
+import com.venyou.service.HallPricingService;
+
+public class HallPricingServiceImpl implements HallPricingService {
+
+}
