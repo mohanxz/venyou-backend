@@ -10,6 +10,7 @@ import com.venyou.service.dto.HallRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -169,4 +170,12 @@ public class HallServiceImpl implements HallService {
                 .map(HallDTO::new)
                 .collect(Collectors.toList());
     }
+    @Override
+public List<String> getHallAmenities(Long hallId) {
+    Hall hall = hallRepository.findById(hallId)
+            .orElseThrow(() -> new HallNotFoundException("Hall not found with ID: " + hallId));
+    
+    // Return the amenities list or empty list if null
+    return hall.getAmenities() != null ? hall.getAmenities() : Collections.emptyList();
+}
 }
