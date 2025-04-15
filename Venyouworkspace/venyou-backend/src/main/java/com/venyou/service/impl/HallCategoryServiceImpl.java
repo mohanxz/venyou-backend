@@ -2,6 +2,7 @@ package com.venyou.service.impl;
 
 import com.venyou.exception.CategoryAlreadyExistsException;
 import com.venyou.exception.CategoryNotFoundException;
+import com.venyou.exception.HallNotFoundException;
 import com.venyou.model.HallCategory;
 import com.venyou.repository.HallCategoryRepository;
 import com.venyou.service.HallCategoryService;
@@ -16,6 +17,12 @@ public class HallCategoryServiceImpl implements HallCategoryService {
 
     public HallCategoryServiceImpl(HallCategoryRepository hallCategoryRepository) {
         this.hallCategoryRepository = hallCategoryRepository;
+    }
+
+    @Override
+    public HallCategory getCategoryById(Long id) {
+        return hallCategoryRepository.findById(id)
+                .orElseThrow(() -> new HallNotFoundException("Category not found with ID: " + id));
     }
 
     @Override
@@ -54,4 +61,5 @@ public class HallCategoryServiceImpl implements HallCategoryService {
         }
         hallCategoryRepository.deleteById(categoryId);
     }
+ 
 }

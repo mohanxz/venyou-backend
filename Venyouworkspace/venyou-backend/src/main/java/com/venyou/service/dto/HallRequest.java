@@ -29,6 +29,11 @@ public class HallRequest {
     private String description;
     
     private Long ownerId;
+    private String ownerName;
+private String ownerEmail;
+private String ownerPhone;
+private String ownerAadhar;
+
 
     private Long categoryId;
     private String categoryName;

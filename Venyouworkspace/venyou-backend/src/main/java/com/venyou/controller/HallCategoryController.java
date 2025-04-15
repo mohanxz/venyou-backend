@@ -2,7 +2,6 @@ package com.venyou.controller;
 
 import com.venyou.model.HallCategory;
 import com.venyou.service.HallCategoryService;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +25,14 @@ public class HallCategoryController {
                 .body(hallCategoryService.addCategory(category.getCategoryName()));
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<HallCategory> getCategoryByName(@PathVariable String name) {
         return ResponseEntity.ok(hallCategoryService.getCategoryByName(name));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<HallCategory> getCategoryById(@PathVariable Long id) {
+        return ResponseEntity.ok(hallCategoryService.getCategoryById(id));
     }
 
     @GetMapping

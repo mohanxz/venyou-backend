@@ -47,8 +47,22 @@ public class HallServiceImpl implements HallService {
     @Transactional
     @Override
     public HallDTO addHall(HallRequest hallRequest) throws OwnerNotFoundException {
-        Owner owner = ownerRepository.findById(hallRequest.getOwnerId())
-                .orElseThrow(() -> new OwnerNotFoundException("Owner not found with ID: " + hallRequest.getOwnerId()));
+        Owner owner;
+
+        // Either use existing owner or create new
+        if (hallRequest.getOwnerId() != null) {
+            owner = ownerRepository.findById(hallRequest.getOwnerId())
+                    .orElseThrow(() -> new OwnerNotFoundException("Owner not found with ID: " + hallRequest.getOwnerId()));
+        } else if (hallRequest.getOwnerName() != null) {
+            owner = new Owner();
+            owner.setName(hallRequest.getOwnerName());
+            owner.setEmail(hallRequest.getOwnerEmail());
+            owner.setPhone(hallRequest.getOwnerPhone());
+            owner.setAadharNumber(hallRequest.getOwnerAadhar());
+            owner = ownerRepository.save(owner);
+        } else {
+            throw new IllegalArgumentException("Either ownerId or full owner details must be provided.");
+        }
 
         Hall hall = new Hall();
         hall.setOwner(owner);
@@ -67,12 +81,11 @@ public class HallServiceImpl implements HallService {
         hall.setDescription(hallRequest.getDescription());
         hall.setMapEmbedUrl(hallRequest.getMapEmbedUrl());
 
-        // Set image paths
         if (hallRequest.getImagePaths() != null && !hallRequest.getImagePaths().isEmpty()) {
             hall.setImagePaths(hallRequest.getImagePaths());
         }
 
-        // Handle Category
+        // Category handling
         HallCategory category = null;
         if (hallRequest.getCategoryId() != null) {
             category = hallCategoryRepository.findById(hallRequest.getCategoryId())
@@ -84,7 +97,7 @@ public class HallServiceImpl implements HallService {
         }
         hall.setCategory(category);
 
-        // Handle Brand
+        // Brand handling
         Brand brand = null;
         if (hallRequest.getBrandId() != null) {
             brand = brandRepository.findById(hallRequest.getBrandId())
@@ -94,7 +107,7 @@ public class HallServiceImpl implements HallService {
             if (brand == null) {
                 brand = new Brand();
                 brand.setName(hallRequest.getBrandName());
-                brand.setDescription("Automatically created brand");
+                brand.setDescription("Auto-created brand");
                 brand.setOwner(owner);
                 brand = brandRepository.save(brand);
             }
@@ -125,7 +138,6 @@ public class HallServiceImpl implements HallService {
         hall.setDescription(hallRequest.getDescription());
         hall.setMapEmbedUrl(hallRequest.getMapEmbedUrl());
 
-        // Update image paths if provided
         if (hallRequest.getImagePaths() != null) {
             hall.setImagePaths(hallRequest.getImagePaths());
         }

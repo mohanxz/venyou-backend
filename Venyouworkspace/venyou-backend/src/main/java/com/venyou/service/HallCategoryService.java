@@ -10,4 +10,5 @@ public interface HallCategoryService {
     List<HallCategory> getAllCategories();
     HallCategory updateCategory(long id, HallCategory updatedCategory);
     void deleteByCategoryId(long categoryId);
+    HallCategory getCategoryById(Long id);
 }

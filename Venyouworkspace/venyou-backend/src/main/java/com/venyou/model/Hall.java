@@ -117,11 +117,15 @@ public class Hall {
     @Lob
     @Column(columnDefinition = "TEXT")
     private String mapEmbedUrl;
-
+    
     public enum Status {
-        AVAILABLE, BOOKED
+        AVAILABLE,
+        BOOKED,
+        INACTIVE,
+        UNDER_REVIEW,
+        DRAFT
     }
-
+    
     // Custom Getter/Setter for imagePaths to handle List in JSON
 
     @JsonProperty("imagePaths")
