@@ -7,4 +7,5 @@ import com.venyou.model.Invoice;
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
+    Invoice findByBookingBookingId(Long bookingId);
 }

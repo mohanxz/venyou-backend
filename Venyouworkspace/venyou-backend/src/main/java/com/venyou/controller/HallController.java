@@ -88,6 +88,9 @@ public class HallController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();  // 404 Not Found
         }
     }
-}
 
-/*hello wo */
+    @GetMapping("/amenities/{hallId}")
+    public ResponseEntity<List<String>> getHallAmenities(@PathVariable Long hallId) {
+        return ResponseEntity.ok(hallService.getHallAmenities(hallId));
+    }
+}
