@@ -46,6 +46,7 @@ public class Booking {
 
     private String eventType;
     private LocalDate eventDate;
+    private LocalDate eventEndDate;
     private LocalTime eventStartTime;
     private LocalTime eventEndTime;
     private LocalDateTime bookingDate = LocalDateTime.now();

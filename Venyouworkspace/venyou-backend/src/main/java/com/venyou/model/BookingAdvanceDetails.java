@@ -44,6 +44,7 @@ public class BookingAdvanceDetails {
     private PaymentStatus finalPaymentStatus = PaymentStatus.PENDING;
 
     public enum PaymentStatus {
+        
         PENDING, COMPLETED
     }
 }

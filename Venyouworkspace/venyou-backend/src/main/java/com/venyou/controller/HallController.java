@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -28,9 +29,9 @@ public class HallController {
     public ResponseEntity<List<HallDTO>> getAllHalls() {
         List<HallDTO> halls = hallService.getAllHalls();
         if (halls.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 204 No Content if no halls found
+            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(halls);  // 200 OK with halls data
+        return ResponseEntity.ok(halls);
     }
 
     // Endpoint to fetch a hall by ID
@@ -40,7 +41,7 @@ public class HallController {
             HallDTO hall = hallService.getHallById(id);
             return ResponseEntity.ok(hall);
         } catch (HallNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // 404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -49,9 +50,9 @@ public class HallController {
     public ResponseEntity<HallDTO> createHall(@RequestBody HallRequest hallRequest) {
         try {
             HallDTO createdHall = hallService.addHall(hallRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdHall);  // 201 Created
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdHall);
         } catch (OwnerNotFoundException | HallNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);  // 400 Bad Request
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
@@ -60,9 +61,9 @@ public class HallController {
     public ResponseEntity<HallDTO> updateHall(@PathVariable Long id, @RequestBody HallRequest hallRequest) {
         try {
             HallDTO updatedHall = hallService.updateHall(id, hallRequest);
-            return ResponseEntity.ok(updatedHall);  // 200 OK with updated hall
+            return ResponseEntity.ok(updatedHall);
         } catch (HallNotFoundException | OwnerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);  // 404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -71,9 +72,9 @@ public class HallController {
     public ResponseEntity<Void> deleteHall(@PathVariable Long id) {
         try {
             hallService.deleteHall(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();  // 204 No Content
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (HallNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();  // 404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -84,9 +85,33 @@ public class HallController {
             List<HallDTO> halls = hallService.getHallsByOwner(ownerId);
             return ResponseEntity.ok(halls);
         } catch (OwnerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();  // 404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-}
 
-/*hello wo */
+    @GetMapping("/filter")
+    public ResponseEntity<List<HallDTO>> filterHalls(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String state,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) Integer minCapacity,
+            @RequestParam(required = false) Integer maxCapacity,
+            @RequestParam(required = false) String categoryName,
+            @RequestParam(required = false) String brandName,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            @RequestParam(required = false) String startTime,
+            @RequestParam(required = false) String endTime,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        List<HallDTO> halls = hallService.filterHalls(
+                name, city, state, address, minPrice, maxPrice, minCapacity, maxCapacity,
+                categoryName, brandName, startDate, endDate, startTime, endTime, page, size
+        );
+        return ResponseEntity.ok(halls);
+    }
+}
