@@ -12,10 +12,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+<<<<<<< HEAD
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+=======
+import java.util.Collections;
+>>>>>>> a5e482a41f457dcce9bc23e3901833c351db1d17
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -175,6 +179,7 @@ public class HallServiceImpl implements HallService {
                 .map(HallDTO::new)
                 .collect(Collectors.toList());
     }
+<<<<<<< HEAD
 
     @Override
     public List<HallDTO> filterHalls(
@@ -221,3 +226,14 @@ public class HallServiceImpl implements HallService {
                 .collect(Collectors.toList());
     }
 }
+=======
+    @Override
+public List<String> getHallAmenities(Long hallId) {
+    Hall hall = hallRepository.findById(hallId)
+            .orElseThrow(() -> new HallNotFoundException("Hall not found with ID: " + hallId));
+    
+    // Return the amenities list or empty list if null
+    return hall.getAmenities() != null ? hall.getAmenities() : Collections.emptyList();
+}
+}
+>>>>>>> a5e482a41f457dcce9bc23e3901833c351db1d17

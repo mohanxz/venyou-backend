@@ -21,6 +21,7 @@ public interface HallService {
     void deleteHall(Long hallId) throws HallNotFoundException;
 
     List<HallDTO> getHallsByOwner(Long ownerId) throws OwnerNotFoundException;
+<<<<<<< HEAD
 
     List<HallDTO> filterHalls(
             String name, String city, String state, String address,
@@ -31,3 +32,7 @@ public interface HallService {
             int page, int size
     );
 }
+=======
+    List<String> getHallAmenities(Long hallId);
+}
+>>>>>>> a5e482a41f457dcce9bc23e3901833c351db1d17
