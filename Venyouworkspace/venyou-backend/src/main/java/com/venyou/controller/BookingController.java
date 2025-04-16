@@ -31,7 +31,6 @@ import com.venyou.service.dto.PaymentRequestDTO;
 import com.venyou.service.dto.PriceCalculationRequest;
 import com.venyou.service.dto.PriceCalculationResponse;
 import com.venyou.service.dto.ServiceDTO;
-
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -57,13 +56,25 @@ public class BookingController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{hallId}/calculate-price")
-public ResponseEntity<PriceCalculationResponse> calculatePrice(
-    @PathVariable Long hallId,
-    @RequestBody PriceCalculationRequest request) {
-    
-    return ResponseEntity.ok(bookingService.calculatePrice(hallId, request));
-}
+    // @GetMapping("/{hallId}/price")
+    // public ResponseEntity<Map<String, BigDecimal>> getHallPrice(@PathVariable Long hallId) {
+    //     BigDecimal pricePer12Hours = hallService.getPricePer12Hours(hallId);
+    //     Map<String, BigDecimal> response = new HashMap<>();
+    //     response.put("pricePer12Hours", pricePer12Hours);
+    //     return ResponseEntity.ok(response);
+    // }
+
+    // @GetMapping("/amenities/{hallId}")
+    // public ResponseEntity<List<String>> getAmenities(@PathVariable Long hallId) {
+    //     return ResponseEntity.ok(hallService.getAmenitiesByHallId(hallId));
+    // }
+
+    @PostMapping("/pay")
+    public ResponseEntity<BookingResponseDTO> processPayment(
+        @RequestBody PaymentRequestDTO paymentRequestDTO) {
+        BookingResponseDTO response = bookingService.processPayment(paymentRequestDTO);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/process-due-payments")
     public ResponseEntity<String> processDuePayments() {

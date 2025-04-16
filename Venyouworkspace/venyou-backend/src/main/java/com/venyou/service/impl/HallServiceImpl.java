@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -83,8 +84,11 @@ public class HallServiceImpl implements HallService {
         hall.setMapEmbedUrl(hallRequest.getMapEmbedUrl());
 
         if (hallRequest.getImagePaths() != null && !hallRequest.getImagePaths().isEmpty()) {
-            hall.setImagePaths(hallRequest.getImagePaths());
+            hall.setImagePathsFromList(hallRequest.getImagePaths());
         }
+
+        // Set the virtual tour map URL
+        hall.setVirtualTourMap(hallRequest.getVirtualTourMap());
 
         // Category handling
         HallCategory category = null;
@@ -115,6 +119,17 @@ public class HallServiceImpl implements HallService {
         }
         hall.setBrand(brand);
 
+        // Optional Fields
+        if (hallRequest.getFeatureBannerImage() != null) {
+            hall.setFeatureBannerImage(hallRequest.getFeatureBannerImage());
+        }
+        if (hallRequest.getVideoSrc() != null) {
+            hall.setVideoSrc(hallRequest.getVideoSrc());
+        }
+        if (hallRequest.getAmenities() != null && !hallRequest.getAmenities().isEmpty()) {
+            hall.setAmenities(hallRequest.getAmenities());
+        }
+
         return new HallDTO(hallRepository.save(hall));
     }
 
@@ -139,8 +154,11 @@ public class HallServiceImpl implements HallService {
         hall.setDescription(hallRequest.getDescription());
         hall.setMapEmbedUrl(hallRequest.getMapEmbedUrl());
 
+        // Update virtual tour map URL
+        hall.setVirtualTourMap(hallRequest.getVirtualTourMap());
+
         if (hallRequest.getImagePaths() != null) {
-            hall.setImagePaths(hallRequest.getImagePaths());
+            hall.setImagePathsFromList(hallRequest.getImagePaths());
         }
 
         if (hallRequest.getOwnerId() != null) {
@@ -159,6 +177,17 @@ public class HallServiceImpl implements HallService {
             Brand brand = brandRepository.findById(hallRequest.getBrandId())
                     .orElseThrow(() -> new HallNotFoundException("Brand not found with ID: " + hallRequest.getBrandId()));
             hall.setBrand(brand);
+        }
+
+        // Optional Fields Update
+        if (hallRequest.getFeatureBannerImage() != null) {
+            hall.setFeatureBannerImage(hallRequest.getFeatureBannerImage());
+        }
+        if (hallRequest.getVideoSrc() != null) {
+            hall.setVideoSrc(hallRequest.getVideoSrc());
+        }
+        if (hallRequest.getAmenities() != null && !hallRequest.getAmenities().isEmpty()) {
+            hall.setAmenities(hallRequest.getAmenities());
         }
 
         return new HallDTO(hallRepository.save(hall));
@@ -182,12 +211,13 @@ public class HallServiceImpl implements HallService {
                 .map(HallDTO::new)
                 .collect(Collectors.toList());
     }
+
     @Override
-public List<String> getHallAmenities(Long hallId) {
-    Hall hall = hallRepository.findById(hallId)
-            .orElseThrow(() -> new HallNotFoundException("Hall not found with ID: " + hallId));
-    
-    // Return the amenities list or empty list if null
-    return hall.getAmenities() != null ? hall.getAmenities() : Collections.emptyList();
-}
+    public List<String> getHallAmenities(Long hallId) throws HallNotFoundException {
+        Hall hall = hallRepository.findById(hallId)
+                .orElseThrow(() -> new HallNotFoundException("Hall not found with ID: " + hallId));
+
+        // Return the amenities list or an empty list if null
+        return Optional.ofNullable(hall.getAmenities()).orElse(Collections.emptyList());
+    }
 }

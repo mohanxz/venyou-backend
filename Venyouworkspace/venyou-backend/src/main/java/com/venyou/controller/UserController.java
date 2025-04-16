@@ -16,7 +16,7 @@ import com.venyou.model.User;
 import com.venyou.service.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 	 @Autowired
 	    private UserService userService;
@@ -28,7 +28,7 @@ public class UserController {
 	    
 	    @GetMapping
 	    public List<User> getAllUsers() {
-	        return userService.getAllUsers();
+	        return userService.getAllUsers() ;
 	    }
 	    
 	    @GetMapping("/{id}")
@@ -45,6 +45,6 @@ public class UserController {
 	    public void deleteUser(@PathVariable Long id) {
 	        userService.deleteUser(id);
 	    }
-	
 
+		
 }

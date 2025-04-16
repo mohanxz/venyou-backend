@@ -4,7 +4,10 @@ import com.venyou.model.Hall;
 import com.venyou.model.Hall.Status;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HallDTO {
 
@@ -39,7 +42,11 @@ public class HallDTO {
     private List<String> amenities;
     private double averageRating;
 
-    // --- Constructor from Hall Entity ---
+    // Empty constructor
+    public HallDTO() {
+    }
+
+    // Constructor from Hall Entity
     public HallDTO(Hall hall) {
         this.hallId = hall.getHallId();
         this.name = hall.getName();
@@ -63,17 +70,37 @@ public class HallDTO {
         this.description = hall.getDescription();
         this.status = hall.getStatus();
 
-        this.imagePaths = hall.getImagePaths(); // this returns List<String> from comma-separated string
+        // Convert comma-separated string to List<String>
+        this.imagePaths = convertImagePaths(hall.getImagePaths());
         this.virtualTourMap = hall.getVirtualTourMap();
         this.mapEmbedUrl = hall.getMapEmbedUrl();
         this.featureBannerImage = hall.getFeatureBannerImage();
         this.videoSrc = hall.getVideoSrc();
 
-        this.amenities = hall.getAmenities();
+        this.amenities = hall.getAmenities() != null ? hall.getAmenities() : Collections.emptyList();
         this.averageRating = hall.getAverageRating();
     }
 
-    // --- Getters and Setters ---
+    // Helper method to convert image paths string to list
+    private List<String> convertImagePaths(String imagePathsString) {
+        if (imagePathsString == null || imagePathsString.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Arrays.stream(imagePathsString.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+    }
+
+    // Helper method to convert list back to comma-separated string
+    public String getImagePathsAsString() {
+        if (imagePaths == null || imagePaths.isEmpty()) {
+            return null;
+        }
+        return String.join(",", imagePaths);
+    }
+
+    // Getters and Setters
     public Long getHallId() {
         return hallId;
     }
@@ -223,7 +250,7 @@ public class HallDTO {
     }
 
     public void setImagePaths(List<String> imagePaths) {
-        this.imagePaths = imagePaths;
+        this.imagePaths = imagePaths != null ? imagePaths : Collections.emptyList();
     }
 
     public String getVirtualTourMap() {
@@ -263,7 +290,7 @@ public class HallDTO {
     }
 
     public void setAmenities(List<String> amenities) {
-        this.amenities = amenities;
+        this.amenities = amenities != null ? amenities : Collections.emptyList();
     }
 
     public double getAverageRating() {
@@ -272,5 +299,31 @@ public class HallDTO {
 
     public void setAverageRating(double averageRating) {
         this.averageRating = averageRating;
+    }
+
+    // Utility method to convert to Hall entity
+    public Hall toEntity() {
+        Hall hall = new Hall();
+        hall.setHallId(this.hallId);
+        hall.setName(this.name);
+        hall.setCapacity(this.capacity);
+        hall.setTotalRooms(this.totalRooms);
+        hall.setRoomPrice(this.roomPrice);
+        hall.setRoomInfo(this.roomInfo);
+        hall.setPrice(this.price);
+        hall.setAddressLine1(this.addressLine1);
+        hall.setAddressLine2(this.addressLine2);
+        hall.setCity(this.city);
+        hall.setState(this.state);
+        hall.setPostalCode(this.postalCode);
+        hall.setCountry(this.country);
+        hall.setDescription(this.description);
+        hall.setStatus(this.status);
+        hall.setVirtualTourMap(this.virtualTourMap);
+        hall.setMapEmbedUrl(this.mapEmbedUrl);
+        hall.setFeatureBannerImage(this.featureBannerImage);
+        hall.setVideoSrc(this.videoSrc);
+        hall.setAmenities(this.amenities);
+        return hall;
     }
 }
