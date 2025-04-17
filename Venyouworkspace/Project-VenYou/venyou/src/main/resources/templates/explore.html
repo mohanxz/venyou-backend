@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VenYou - Halls</title>
+    <link rel="stylesheet" href="/dist/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            width: 100%;
+        }
+
+        .card-img-top {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .description-image-icon {
+            position: absolute;
+            top: 160px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #555;
+            z-index: 2;
+        }
+
+        .description-image-icon:hover {
+            color: #f8d210;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .title-rating {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .rating i {
+            color: gold;
+            font-size: 1rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .right-align {
+            justify-content: flex-end;
+        }
+
+        .info-icon {
+            margin-right: 8px;
+            color: #555;
+            width: 20px;
+            text-align: center;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #000;
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .action-icons {
+            display: flex;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .amenities-tooltip {
+            cursor: pointer;
+            color: #555;
+            transition: color 0.2s;
+        }
+
+        .amenities-tooltip:hover {
+            color: #f8d210;
+        }
+
+        .amenities-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<section>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4 mb-4" th:each="hall : ${halls}">
+                <a th:href="@{'/hall/' + ${hall.hallId}}" class="text-decoration-none text-dark">
+                    <div class="card shadow rounded-4">
+
+                        <!-- ✅ Use First Image from imagePaths as Card Banner Image -->
+                        <img th:if="${hall.imagePaths != null and !hall.imagePaths.isEmpty()}"
+                             th:src="@{${hall.imagePaths[0]}}"
+                             alt="Hall Image"
+                             class="card-img-top">
+
+                        <!-- Tooltip on image icon -->
+                        <div class="description-image-icon" data-bs-toggle="tooltip" th:title="${hall.description}">
+                            <i class="bi bi-card-text"></i>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="title-rating d-flex justify-content-between align-items-start flex-column mb-2">
+                                <div>
+                                    <h6 class="mb-0 text-primary" th:if="${hall.brandName != null}"
+                                        th:text="${hall.brandName}">Brand Name</h6>
+                                    <h5 class="card-title mb-0" th:text="${hall.name}">Hall Name</h5>
+                                </div>
+                                <div class="rating align-self-end mt-2">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <span>
+                                        <span th:text="${hall.averageRating}">4.5</span>
+                                        <small th:text="'(' + ${#lists.size(hall.amenities)} + ' amenities)'"></small>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="info-grid">
+                                <div class="info-item d-flex align-items-center">
+                                    <i class="bi bi-people-fill info-icon"></i>
+                                    <span th:text="${hall.capacity} + ' people'">200 people</span>
+                                </div>
+                                <div class="info-item right-align d-flex align-items-center">
+                                    <i class="bi bi-door-open info-icon"></i>
+                                    <span th:text="${hall.totalRooms} + ' rooms'">5 rooms</span>
+                                </div>
+                                <div class="info-item d-flex align-items-center">
+                                    <i class="bi bi-geo-alt-fill info-icon"></i>
+                                    <span th:text="${hall.city}">Chennai</span>
+                                </div>
+                                <div class="info-item right-align d-flex align-items-center">
+                                    <span th:if="${hall.amenities.contains('AC')}" class="d-flex align-items-center">
+                                        <i class="bi bi-snow info-icon text-primary"></i>
+                                        <span>AC</span>
+                                    </span>
+                                    <span th:unless="${hall.amenities.contains('AC')}" class="d-flex align-items-center">
+                                        <i class="bi bi-brightness-high info-icon text-danger"></i>
+                                        <span>Non-AC</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="action-icons">
+                                <div class="amenities-wrapper">
+                                    <div class="amenities-tooltip" data-bs-toggle="tooltip" data-bs-html="true"
+                                         th:title="${#strings.arrayJoin(hall.amenities, ', ')}">
+                                        <i class="bi bi-info-circle"></i> Amenities
+                                    </div>
+                                    <div class="price" th:text="'₹' + ${hall.price} + ' per day'">₹25,000 per day</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
+</body>
+</html>

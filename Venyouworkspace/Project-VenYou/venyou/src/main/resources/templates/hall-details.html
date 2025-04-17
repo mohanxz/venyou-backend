@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${hall.name} + ' | VenYou Premium'">Hall Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+        :root {
+            --primary-color: #1a1a2e;
+            --secondary-color: #16213e;
+            --accent-color: #f8d210;
+            --dark-color: #0f0f1b;
+            --light-color: #f8f9fa;
+            --text-color: #333333;
+            --text-light: #f5f5f5;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            color: var(--text-color);
+            background-color: #fafafa;
+            padding-top: 0; /* Remove default padding */
+        }
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: white;
+            letter-spacing: 0.5px;
+            padding: 0.25rem 0;
+            margin-right: 2rem;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+        
+        .nav-link.active {
+            color: white !important;
+            font-weight: 600;
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0.75rem;
+            right: 0.75rem;
+            height: 2px;
+            background: var(--accent-color);
+        }
+        
+        .btn-nav {
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.4rem 1.25rem;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            margin-left: 0.5rem;
+        }
+        
+        .btn-nav:hover {
+            background: var(--accent-color);
+            color: var(--dark-color);
+            border-color: var(--accent-color);
+            transform: translateY(-1px);
+        }
+        
+        .navbar-toggler {
+            border: none;
+            padding: 0.25rem;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+        
+        
+::-webkit-scrollbar {
+    width: 12px; 
+}
+
+::-webkit-scrollbar-track {
+    background: #1b1b1b;
+    border-radius: 10px; 
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #c9a227, #e6c300); 
+    border-radius: 10px;
+    border: 2px solid #1b1b1b;
+    transition: background 0.3s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #e6c300, #ffd700); 
+    box-shadow: 0 0 10px rgba(201, 162, 39, 0.8);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(45deg, #ffdb58, #ffbf00); 
+}
+
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #c9a227 #1b1b1b; 
+}
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .navbar-collapse {
+                background: rgba(26, 26, 46, 0.98);
+                backdrop-filter: blur(10px);
+                padding: 1rem;
+                border-radius: 8px;
+                margin-top: 0.5rem;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            }
+            
+            .nav-link {
+                margin: 0.25rem 0;
+                padding: 0.5rem;
+            }
+            
+            .nav-link.active::after {
+                left: 0.5rem;
+                right: 0.5rem;
+            }
+            
+            .btn-nav {
+                margin: 0.5rem 0 0;
+                display: inline-block;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.3rem;
+            }
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .navbar-collapse {
+                background: rgba(26, 26, 46, 0.98);
+                backdrop-filter: blur(8px);
+                padding: 1.5rem;
+                border-radius: 10px;
+                margin-top: 1rem;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            }
+            
+            .nav-link {
+                margin: 0.5rem 0;
+                padding: 0.5rem 1rem;
+            }
+            
+            .nav-link::before {
+                display: none;
+            }
+            
+            .btn-nav {
+                margin-top: 0.5rem;
+                display: inline-block;
+            }
+        }
+
+        
+        /* Premium Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        /* Classic Hero Section */
+        .classic-hero {
+            height: 100vh;
+            min-height: 700px;
+            position: relative;
+            overflow: hidden;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+            align-items: flex-end;
+            box-shadow: inset 0 -80px 60px -30px rgba(0,0,0,0.8);
+            margin-bottom: 3rem;
+        }
+        
+        .classic-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(26,26,46,0.2) 0%, rgba(26,26,46,0.9) 100%);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            color: var(--text-light);
+            padding: 3rem;
+            padding-bottom: 8rem;
+            transition: all 0.5s ease;
+        }
+        
+        .hero-content.scrolled {
+            padding-bottom: 5rem;
+        }
+        
+        .hero-title {
+            font-size: 4rem;
+            transition: all 0.5s ease;
+        }
+        
+        .hero-title.scrolled {
+            font-size: 2.5rem;
+        }
+        
+        .location-badge {
+            background: rgba(248,210,16,0.9);
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(248,210,16,0.3);
+            transition: all 0.5s ease;
+        }
+        
+        .location-badge.scrolled {
+            padding: 0.4rem 1.2rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Premium Section Styling */
+        .section {
+            padding: 5rem 0;
+            position: relative;
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 2.2rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 80px;
+            height: 5px;
+            background: var(--accent-color);
+            border-radius: 3px;
+        }
+        
+        /* Gallery Section */
+        .gallery-container {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+        
+        .gallery-tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 1.5rem;
+        }
+        
+        .gallery-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--accent-color);
+        }
+        
+        .gallery-tab:hover:not(.active) {
+            color: var(--primary-color);
+        }
+        
+        .gallery-content {
+            display: none;
+        }
+        
+        .gallery-content.active {
+            display: block;
+        }
+        
+        .main-display {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            background-color: #f5f5f5;
+        }
+        
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+        }
+        
+        .gallery-thumbnail {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .gallery-thumbnail:hover, .gallery-thumbnail.active {
+            transform: scale(1.05);
+            border-color: var(--accent-color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .video-thumbnail, .virtual-tour-thumbnail {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 100px;
+        }
+        
+        .video-thumbnail::after, .virtual-tour-thumbnail::after {
+            content: '\F4CE';
+            font-family: 'bootstrap-icons';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .video-thumbnail:hover, .virtual-tour-thumbnail:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Classic Booking Form */
+        .booking-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+            position: sticky;
+            top: 40px;
+            border-top: 5px solid var(--accent-color);
+        }
+        
+        .booking-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            position: relative;
+            font-size: 1.8rem;
+        }
+        
+        .booking-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background: var(--accent-color);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .form-control, .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.25rem rgba(248,210,16,0.25);
+            outline: none;
+        }
+        
+        .form-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, var(--accent-color), #f8b810);
+            border: none;
+            padding: 1rem 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            width: 100%;
+            margin-top: 1.5rem;
+            border-radius: 8px;
+            color: var(--dark-color);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(248,210,16,0.4);
+        }
+        
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #f8c210, #f8a810);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(248,210,16,0.6);
+        }
+        
+        .price-display {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .price-label {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Fixed Calendar Styling */
+        .flatpickr-calendar {
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            z-index: 9999 !important;
+        }
+        
+        .flatpickr-calendar.open {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -40%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        .flatpickr-calendar.animate.open {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        #durationOutput {
+            background: #f8f9fa;
+            border: 1px dashed #ccc;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .classic-hero {
+                height: 80vh;
+                min-height: 600px;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .hero-title.scrolled {
+                font-size: 2.2rem;
+            }
+            
+            .section {
+                padding: 3rem 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .classic-hero {
+                height: 70vh;
+                min-height: 500px;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-title.scrolled {
+                font-size: 1.8rem;
+            }
+            
+            .section {
+                padding: 2rem 0;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .booking-card {
+                margin-top: 3rem;
+            }
+            
+            .flatpickr-calendar {
+                width: 90vw !important;
+                max-width: 350px !important;
+            }
+            
+            .main-header {
+                padding: 1rem 0;
+            }
+            
+            .main-header.scrolled {
+                padding: 0.5rem 0;
+            }
+            
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .classic-hero {
+                height: 60vh;
+                min-height: 400px;
+            }
+            
+            .hero-content {
+                padding: 2rem;
+                padding-bottom: 6rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-title.scrolled {
+                font-size: 1.5rem;
+            }
+            
+            .location-badge {
+                font-size: 0.8rem;
+                padding: 0.4rem 1rem;
+            }
+        }
+
+        .footer {
+            position: relative;
+            background: url('assets/images/footer-bg.jpg') no-repeat center center/cover;
+            color: white;
+            padding: 60px 0 30px;
+            font-size: 14px;
+        }
+        .footer-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+        .footer h5 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .underline {
+            border-bottom: 2px solid #f8d210;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        .footer p, .footer ul {
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .footer ul {
+            padding: 0;
+            list-style: none;
+        }
+        .footer ul li {
+            margin-bottom: 10px;
+        }
+        .footer ul .home{
+            margin-right: 37px;
+        }
+        .footer ul .about{
+            margin-right: 23px;
+        }
+        .footer ul .help{
+            margin-right: 45px;
+        }
+        .footer ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .footer ul li a:hover {
+            color: #f8d210;
+            padding-left: 5px;
+        }
+        .badge {
+            font-size: 12px;
+            padding: 5px 8px;
+            margin: 0 5px 8px 0;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        .subscribe input {
+            border-radius: 5px 0 0 5px;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            font-size: 14px;
+            background: rgba(255,255,255,0.9);
+        }
+        .subscribe button {
+            background: #f8d210;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 0 5px 5px 0;
+            font-size: 14px;
+            color: black;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .subscribe button:hover {
+            background: #e6c300;
+        }
+        .social-icons a {
+            color: white;
+            font-size: 18px;
+            margin-right: 18px;
+            transition: 0.3s;
+        }
+        .social-icons a:hover {
+            color: #f8d210;
+            transform: translateY(-3px);
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            margin-top: 40px;
+        }
+        .footer-links a {
+            color: #aaa;
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .footer-links a:hover {
+            color: #f8d210;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Header with Scroll Effect -->
+<header class="main-header" id="mainHeader">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg">
+            <a class="navbar-brand" href="#">VenYou</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Venues</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                        <a class="btn btn-nav" href="#">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
+
+
+<!-- Classic Hero Banner -->
+<div class="classic-hero"
+     th:style="'background-image: url(' + (${hall.imagePaths != null and !hall.imagePaths.isEmpty()} ? @{${hall.imagePaths[0]}} : '/images/default.jpg') + ')'">
+    <div class="hero-content container" id="heroContent">
+        <div class="location-badge" id="locationBadge">
+            <i class="bi bi-geo-alt-fill me-2"></i>
+            <span th:text="${hall.city} + ', ' + ${hall.state}">Salem, Tamil Nadu</span>
+        </div>
+        <h1 class="hero-title display-3 fw-bold mb-4" id="heroTitle" th:text="${hall.name}">Crystal Auditorium</h1>
+        <div class="d-flex align-items-center">
+            <span class="status-badge status-available me-4" th:text="${hall.status}">AVAILABLE</span>
+            <div class="rating-stars">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-half"></i>
+                <span class="ms-3 text-white fw-bold" th:text="${hall.averageRating} + '/5'">4.5/5</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row mt-5">
+        <!-- Left Column - Hall Details -->
+        <div class="col-lg-8">
+            <!-- Gallery Section with Tabs -->
+            <section class="gallery-container">
+                <div class="ratio ratio-16x9">
+                    <img th:if="${hall.imagePaths != null && !hall.imagePaths.isEmpty()}" 
+                         th:src="${hall.imagePaths[0]}" 
+                         class="main-display" 
+                         id="main-display" 
+                         alt="Hall Image">
+                </div>
+                
+                <div class="gallery-tabs mt-4">
+                    <div class="gallery-tab active" data-tab="images">Images</div>
+                    <div class="gallery-tab" data-tab="videos">Videos</div>
+                    <div class="gallery-tab" data-tab="virtual-tour">Virtual Tour</div>
+                </div>
+                
+                <!-- Images Tab Content -->
+                <div class="gallery-content active" id="images-content">
+                    <div class="thumbnail-grid">
+                        <img th:each="image, iter : ${hall.imagePaths}" 
+                             th:src="${image}" 
+                             class="gallery-thumbnail" 
+                             th:classappend="${iter.index == 0} ? 'active'" 
+                             th:attr="onclick='document.getElementById(\'main-display\').src=this.src; document.querySelectorAll(\'.gallery-thumbnail\').forEach(el => el.classList.remove(\'active\')); this.classList.add(\'active\')'">
+                    </div>
+                </div>
+                
+                <!-- Videos Tab Content -->
+                <div class="gallery-content" id="videos-content">
+                    <div class="thumbnail-grid">
+                        <div th:if="${hall.videoSrc != null}" class="video-thumbnail" 
+                             th:style="'background-image: url(' + ${hall.featureBannerImage != null} ? ${hall.featureBannerImage} : ${hall.imagePaths[0]} + ')'"
+                             th:attr="onclick='changeMainContent(\'' + ${hall.videoSrc} + '\', \'video\')'">
+                        </div>
+                        <div th:unless="${hall.videoSrc != null}" class="text-center py-4">
+                            No videos available for this venue
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Virtual Tour Tab Content -->
+                <div class="gallery-content" id="virtual-tour-content">
+                    <div class="thumbnail-grid">
+                        <div th:if="${hall.virtualTourMap != null}" class="virtual-tour-thumbnail" 
+                             th:style="'background-image: url(' + ${hall.imagePaths[0]} + ')'"
+                             th:attr="onclick='changeMainContent(\'' + ${hall.virtualTourMap} + '\', \'iframe\')'">
+                        </div>
+                        <div th:unless="${hall.virtualTourMap != null}" class="text-center py-4">
+                            No virtual tour available for this venue
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Description Section -->
+            <section class="hall-description">
+                <h2 class="section-title">About This Venue</h2>
+                <p class="lead fs-4" th:text="${hall.description}">The crystal ballroom features 4500 sq. ft. of well furnished area...</p>
+                
+                <div class="highlights mt-5">
+                    <h3 class="fw-bold mb-4">Key Features</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> <span th:text="${hall.capacity} + ' person capacity'">600 person capacity</span></li>
+                        <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> <span th:text="'₹' + ${hall.price} + ' starting price'">₹3720 starting price</span></li>
+                        <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Professional event staff</li>
+                        <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Customizable layouts</li>
+                    </ul>
+                </div>
+                
+                <section class="amenities mt-5">
+                    <h2 class="section-title">Amenities & Services</h2>
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <i class="bi bi-cup-hot fs-3 me-3 text-primary"></i>
+                                <div>
+                                    <h5 class="fw-bold">Food & Beverage</h5>
+                                    <ul class="list-unstyled">
+                                        <li>In-house catering</li>
+                                        <li>Bar service</li>
+                                        <li>Custom menus</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <i class="bi bi-speaker fs-3 me-3 text-primary"></i>
+                                <div>
+                                    <h5 class="fw-bold">Audio-Visual</h5>
+                                    <ul class="list-unstyled">
+                                        <li>Projector & screen</li>
+                                        <li>Microphones</li>
+                                        <li>Lighting system</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <i class="bi bi-building fs-3 me-3 text-primary"></i>
+                                <div>
+                                    <h5 class="fw-bold">Facilities</h5>
+                                    <ul class="list-unstyled">
+                                        <li>Bridal suite</li>
+                                        <li>Guest parking</li>
+                                        <li>Elevator access</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Pricing Section -->
+            <section class="pricing mt-5">
+                <h2 class="section-title">Pricing & Packages</h2>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <h3 class="card-title fw-bold">Basic Package</h3>
+                                <div class="price-display text-primary" th:text="'₹' + ${hall.price}">₹3720</div>
+                                <ul class="list-unstyled mb-4">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 6 hours event time</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Basic lighting</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Standard setup</li>
+                                </ul>
+                                <button class="btn btn-outline-primary w-100">Enquire Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <h3 class="card-title fw-bold">Premium Package</h3>
+                                <div class="price-display text-primary" th:text="'₹' + ${hall.price * 1.5}">₹5580</div>
+                                <ul class="list-unstyled mb-4">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 10 hours event time</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Premium lighting</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Custom setup</li>
+                                </ul>
+                                <button class="btn btn-primary w-100">Enquire Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reviews Section -->
+            <section class="reviews mt-5">
+                <h2 class="section-title">Customer Reviews</h2>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="rounded-circle me-3" width="50" height="50" alt="User">
+                                    <div>
+                                        <h5 class="mb-0 fw-bold">Rahul Sharma</h5>
+                                        <div class="text-warning">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="mb-0">"The venue was perfect for our wedding. The staff was extremely helpful and the venue looked stunning. Highly recommended!"</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" class="rounded-circle me-3" width="50" height="50" alt="User">
+                                    <div>
+                                        <h5 class="mb-0 fw-bold">Priya Patel</h5>
+                                        <div class="text-warning">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-half"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="mb-0">"Beautiful space for our corporate event. The acoustics were excellent and the catering was delicious."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Location Section -->
+            <section class="location mt-5">
+                <h2 class="section-title">Location</h2>
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-geo-alt-fill fs-3 text-primary me-3"></i>
+                            <div>
+                                <h5 class="fw-bold mb-3">Address</h5>
+                                <p class="mb-1" th:text="${hall.addressLine1}">349/3 Bangalore, Bypass Rd</p>
+                                <p class="mb-1" th:text="${hall.addressLine2}">Narasothipatti</p>
+                                <p class="mb-1" th:text="${hall.city} + ', ' + ${hall.state} + ' - ' + ${hall.postalCode}">Salem, Tamil Nadu - 636004</p>
+                                <p class="mb-0" th:text="${hall.country}">India</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow">
+                    <div th:utext="${hall.mapEmbedUrl}"></div>
+                </div>
+            </section>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="booking-card mt-1">
+              <form id="bookingForm" th:action="@{/bookings/create}" method="post">
+                <input type="hidden" name="hallId" th:value="${hall.hallId}">
+          
+                <!-- Event Type -->
+                <div class="form-group">
+                  <label for="eventType" class="form-label">Event Type</label>
+                  <select class="form-select" id="eventType" name="eventType" required>
+                    <option value="">Select event type</option>
+                    <option value="WEDDING">Wedding</option>
+                    <option value="CORPORATE">Corporate Event</option>
+                    <option value="BIRTHDAY">Birthday Party</option>
+                    <option value="CONFERENCE">Conference</option>
+                    <option value="OTHER">Other</option>
+                  </select>
+                </div>
+          
+                <!-- Date Time Selection -->
+                <div class="row">
+                  <div class="col-md-12 mb-3">
+                    <label for="startDateTime" class="form-label">Event Start (Date & Time)</label>
+                    <input type="text" class="form-control datetime" id="startDateTime" name="startDateTime" placeholder="Select start date & time" required>
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label for="endDateTime" class="form-label">Event End (Date & Time)</label>
+                    <input type="text" class="form-control datetime" id="endDateTime" name="endDateTime" placeholder="Select end date & time" required>
+                  </div>
+                </div>
+          
+                <!-- Duration -->
+                <div class="form-group mb-3">
+                  <label class="form-label">Selected Schedule</label>
+                  <div id="durationOutput">Select start and end times</div>
+                </div>
+          
+                <!-- Guest Count -->
+                <div class="row">
+                  <div class="col-md-6 mb-1">
+                    <label for="guestCount" class="form-label">Guest Count</label>
+                    <input type="number" class="form-control" id="guestCount" name="guestCount" min="1" th:attr="max=${hall.capacity}" required>
+                  </div>
+                </div>
+          
+                <button type="submit" class="btn btn-submit">
+                  <i class="bi bi-calendar-check me-2"></i> Book Now
+                </button>
+          
+                <div class="text-center mt-1">
+                  <p class="small text-muted">By booking, you agree to our <a href="#">Terms & Conditions</a></p>
+                </div>
+              </form>
+            </div>
+          </div>
+    </div>
+</div>
+<footer class="footer text-white mt-5 pt-5">
+    <div class="footer-overlay"></div>
+    <div class="container footer-content">
+        <div class="row">
+            <!-- About Column -->
+            <div class="col-md-3 mb-4 mb-md-0 ms-5">
+                <h5 class="text-start">Ven<span style="color:#e6c300;">You</span></h5>
+                <p class="text-start">Discover the perfect venue for your special occasions. We connect you with the finest event spaces across the country.</p>
+                <a href="#" class="text-warning text-decoration-none text-start">Read More <i class="bi bi-arrow-right"></i></a>
+            </div>
+            
+            <!-- Quick Links Column -->
+            <div class="col-md-2 mb-4 mb-md-0  ms-5 ps-5">
+                <h5 class="underline">Quick Links</h5>
+                <ul>
+                    <li class="home"><a href="#"><i class="bi bi-chevron-right"></i> Home</a></li>
+                    <li class="about"><a href="#"><i class="bi bi-chevron-right"></i> About Us</a></li>
+                    <li class="halls"><a href="#"><i class="bi bi-chevron-right"></i> Explore Halls</a></li>
+                    <li class="testi"><a href="#"><i class="bi bi-chevron-right"></i> Testimonials</a></li>
+                    <li class="help"><a href="#"><i class="bi bi-chevron-right"></i> Help</a></li>
+                </ul>
+            </div>
+            
+            <!-- Categories Column -->
+            <div class="col-md-2 mb-4 mb-md-0 ms-5 ps-3">
+                <h5 class="underline">Venue Categories</h5>
+                <div>
+                    <span class="badge">Wedding</span>
+                    <span class="badge">Corporate</span>
+                    <span class="badge">Birthday</span>
+                    <span class="badge">Conference</span>
+                    <span class="badge">Outdoor</span>
+                    <span class="badge">Luxury</span>
+                    <span class="badge">Affordable</span>
+                    <span class="badge">Heritage</span>
+                </div>
+            </div>
+            
+            <div class="col-md-2 ms-5 ps-5 ms-5">
+                <h5 class="underline ms-3">Contact Us</h5>
+                <div class="subscribe d-flex mb-3">
+                    <input type="phone" placeholder="Your Number">
+                    <button type="submit"><i class="bi bi-telephone-inbound"></i></i></button>
+                </div>
+                <h5 class="underline mt-4 ms-4">Follow Us</h5>
+                <div class="social-icons d-flex me-5 pe-5">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-twitter"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <a href="#"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer Bottom -->
+        <div class="row footer-bottom">
+            <div class="col-12 text-center">
+                <p class="mb-3">Copyright &copy; 2024 VenYou. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Cookie Policy</a>
+                    <a href="#">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    // Scroll effect for header and hero content
+    window.addEventListener('scroll', function() {
+        const header = document.getElementById('mainHeader');
+        const heroContent = document.getElementById('heroContent');
+        const heroTitle = document.getElementById('heroTitle');
+        const locationBadge = document.getElementById('locationBadge');
+        const scrollPosition = window.scrollY;
+        
+        // Add scrolled class to header after 100px scroll
+        if (scrollPosition > 100) {
+            header.classList.add('scrolled');
+            heroTitle.classList.add('scrolled');
+            locationBadge.classList.add('scrolled');
+            heroContent.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+            heroTitle.classList.remove('scrolled');
+            locationBadge.classList.remove('scrolled');
+            heroContent.classList.remove('scrolled');
+        }
+    });
+    window.addEventListener('scroll', function() {
+        const header = document.getElementById('mainHeader');
+        const scrollPosition = window.scrollY;
+        
+        if (scrollPosition > 80) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // Initialize date picker
+    flatpickr(".datepicker", {
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        disable: [
+            function(date) {
+                // Disable weekends
+                return (date.getDay() === 0 || date.getDay() === 6);
+            }
+        ]
+    });
+    
+    // Gallery tabs functionality
+    const tabs = document.querySelectorAll('.gallery-tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active class from all tabs and content
+            document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.gallery-content').forEach(c => c.classList.remove('active'));
+            
+            // Add active class to clicked tab and corresponding content
+            tab.classList.add('active');
+            const tabId = tab.getAttribute('data-tab');
+            document.getElementById(`${tabId}-content`).classList.add('active');
+        });
+    });
+
+    // Function to change main display content
+    function changeMainContent(src, type) {
+        const mainDisplay = document.getElementById('main-display');
+        const mainImageContainer = mainDisplay.parentElement;
+        
+        if (type === 'image') {
+            // Create new image element
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = "Venue Image";
+            img.className = "main-display";
+            img.style.objectFit = "cover";
+            
+            // Replace current content with new image
+            mainDisplay.replaceWith(img);
+            img.id = 'main-display';
+        } 
+        else if (type === 'video' || type === 'iframe') {
+            // Create iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = src;
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('allowfullscreen', '');
+            iframe.setAttribute('allow', 'autoplay');
+            iframe.className = "main-display";
+            
+            // Replace current content with iframe
+            mainDisplay.replaceWith(iframe);
+            iframe.id = 'main-display';
+        }
+    }
+</script>
+<script>
+    flatpickr(".datetime", {
+      enableTime: true,
+      dateFormat: "Y-m-d h:i K",
+      minDate: "today",
+      time_24hr: false,
+      onOpen: function(selectedDates, dateStr, instance) {
+        // Disable scrolling on the body when calendar is open
+        document.body.style.overflow = 'hidden';
+      },
+      onClose: function() {
+        // Re-enable scrolling when calendar is closed
+        document.body.style.overflow = '';
+      }
+    });
+  
+    const startInput = document.getElementById('startDateTime');
+    const endInput = document.getElementById('endDateTime');
+    const durationOutput = document.getElementById('durationOutput');
+  
+    function formatReadableDateTime(dateObj) {
+      return dateObj.toLocaleString('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric',
+        hour: 'numeric', minute: '2-digit', hour12: true
+      });
+    }
+  
+    function calculateDurationText(hours) {
+      const days = Math.ceil(hours / 12);
+      return `${days} ${days === 1 ? 'Day' : 'Days'}`;
+    }
+  
+    function updateDuration() {
+      const start = new Date(startInput.value);
+      const end = new Date(endInput.value);
+  
+      if (!isNaN(start) && !isNaN(end) && end > start) {
+        const diffMs = end - start;
+        const hours = diffMs / (1000 * 60 * 60);
+        const durationText = calculateDurationText(hours);
+  
+        const startStr = formatReadableDateTime(start);
+        const endStr = formatReadableDateTime(end);
+  
+        durationOutput.textContent = `${startStr} to ${endStr} (${durationText})`;
+      } else {
+        durationOutput.textContent = "Select valid start and end times";
+      }
+    }
+  
+    startInput.addEventListener("change", updateDuration);
+    endInput.addEventListener("change", updateDuration);
+</script>
+  
+</body>
+</html>

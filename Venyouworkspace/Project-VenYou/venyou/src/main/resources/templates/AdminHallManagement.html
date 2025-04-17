@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hall Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body class="container py-5">
+<h2 class="mb-4">Create / Edit Hall</h2>
+
+<form th:action="@{/admin/halls/save}" th:object="${hallDto}" method="post" enctype="multipart/form-data">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" th:field="*{name}" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Capacity</label>
+            <input type="number" class="form-control" th:field="*{capacity}" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" th:field="*{description}"></textarea>
+    </div>
+
+    <!-- Owner -->
+    <div class="mb-3">
+        <label class="form-label">Owner</label>
+        <select class="form-select" th:field="*{ownerId}">
+            <option value="" disabled selected>-- Select Owner --</option>
+            <option th:each="owner : ${owners}" th:value="${owner.ownerId}" th:text="${owner.name}"></option>
+        </select>
+    </div>
+
+    <!-- Brand -->
+    <div class="mb-3">
+        <label class="form-label">Brand</label>
+        <select class="form-select" th:field="*{brandId}">
+            <option value="" disabled selected>-- Select Brand --</option>
+            <option th:each="brand : ${brands}" th:value="${brand.brandId}" th:text="${brand.name}"></option>
+        </select>
+    </div>
+
+    <!-- Category -->
+    <div class="mb-3">
+        <label class="form-label">Category</label>
+        <select class="form-select" th:field="*{categoryId}">
+            <option value="" disabled selected>-- Select Category --</option>
+            <option th:each="cat : ${categories}"
+                    th:value="${cat.categoryId}"
+                    th:text="${cat.categoryName}">Category</option>
+        </select>
+    </div>
+    
+
+    <!-- Room Details -->
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label class="form-label">Total Rooms</label>
+            <input type="number" class="form-control" th:field="*{totalRooms}" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Room Price</label>
+            <input type="number" class="form-control" th:field="*{roomPrice}" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Room Info</label>
+            <input type="text" class="form-control" th:field="*{roomInfo}" />
+        </div>
+    </div>
+
+    <!-- Hall Price -->
+    <div class="mb-3">
+        <label class="form-label">Hall Price</label>
+        <input type="number" class="form-control" th:field="*{price}" />
+    </div>
+
+    <!-- Address -->
+    <div class="mb-3">
+        <label class="form-label">Address Line 1</label>
+        <input type="text" class="form-control" th:field="*{addressLine1}" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Address Line 2</label>
+        <input type="text" class="form-control" th:field="*{addressLine2}" />
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label class="form-label">City</label>
+            <input type="text" class="form-control" th:field="*{city}" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">State</label>
+            <input type="text" class="form-control" th:field="*{state}" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Postal Code</label>
+            <input type="text" class="form-control" th:field="*{postalCode}" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Country</label>
+        <input type="text" class="form-control" th:field="*{country}" />
+    </div>
+
+    <!-- Amenities -->
+    <div class="mb-3">
+        <label class="form-label">Amenities</label><br/>
+        <div class="form-check form-check-inline" th:each="amenity : ${amenitiesList}">
+            <input class="form-check-input" type="checkbox" th:field="*{amenities}" th:value="${amenity}" />
+            <label class="form-check-label" th:text="${amenity}"></label>
+        </div>
+    </div>
+
+    <!-- Image Upload -->
+    <div class="mb-3">
+        <label class="form-label">Upload Images</label>
+        <input class="form-control" type="file" name="images" multiple />
+    </div>
+
+    <!-- Map Embed URL -->
+    <div class="mb-3">
+        <label class="form-label">Google Map Embed URL</label>
+        <input type="text" class="form-control" th:field="*{mapEmbedUrl}" />
+    </div>
+
+    <!-- Map Preview -->
+    <div class="mb-4">
+        <label class="form-label">Map Preview</label><br/>
+        <iframe th:src="${hallDto.mapEmbedUrl}" width="100%" height="300" style="border:0;" allowfullscreen=""></iframe>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="btn btn-primary">Save Hall</button>
+</form>
+
+</body>
+</html>

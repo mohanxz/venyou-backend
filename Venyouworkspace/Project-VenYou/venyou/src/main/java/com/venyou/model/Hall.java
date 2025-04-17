@@ -1,0 +1,277 @@
+package com.venyou.model;
+
+import java.util.List;
+
+public class Hall {
+    private Long hallId;
+
+    // Basic Info
+    private String name;
+    private String description;
+    private String status;
+
+    // Associated Entities
+    private Owner owner;
+    private Brand brand;
+    private HallCategory category;
+
+    // Display Names
+    private String ownerName;
+    private String brandName;
+    private String categoryName;
+
+    // Capacity Info
+    private Integer capacity;
+    private Integer totalRooms;
+    private Double roomPrice;
+    private String roomInfo;
+    private Double price;
+
+    // Location Info
+    private String addressLine1;
+    private String addressLine2;
+    private String city;
+    private String state;
+    private String postalCode;
+    private String country;
+    private String mapEmbedUrl;
+
+    // Media
+    private String featureBannerImage;
+    private String videoSrc;
+    private String virtualTourMap;
+    private List<String> imagePaths;
+
+    // Extras
+    private List<String> amenities;
+    private Double averageRating;
+
+    // Getters and Setters
+    // ✨ Use Lombok in real projects to reduce this boilerplate
+
+    // ... (All getters/setters as you already have, plus for Owner, Brand, Category)
+
+    public Long getHallId() {
+        return hallId;
+    }
+
+    public void setHallId(Long hallId) {
+        this.hallId = hallId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Owner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
+
+    public HallCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(HallCategory category) {
+        this.category = category;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
+
+    public Integer getTotalRooms() {
+        return totalRooms;
+    }
+
+    public void setTotalRooms(Integer totalRooms) {
+        this.totalRooms = totalRooms;
+    }
+
+    public Double getRoomPrice() {
+        return roomPrice;
+    }
+
+    public void setRoomPrice(Double roomPrice) {
+        this.roomPrice = roomPrice;
+    }
+
+    public String getRoomInfo() {
+        return roomInfo;
+    }
+
+    public void setRoomInfo(String roomInfo) {
+        this.roomInfo = roomInfo;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getAddressLine1() {
+        return addressLine1;
+    }
+
+    public void setAddressLine1(String addressLine1) {
+        this.addressLine1 = addressLine1;
+    }
+
+    public String getAddressLine2() {
+        return addressLine2;
+    }
+
+    public void setAddressLine2(String addressLine2) {
+        this.addressLine2 = addressLine2;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getMapEmbedUrl() {
+        return mapEmbedUrl;
+    }
+
+    public void setMapEmbedUrl(String mapEmbedUrl) {
+        this.mapEmbedUrl = mapEmbedUrl;
+    }
+
+    public String getFeatureBannerImage() {
+        return featureBannerImage;
+    }
+
+    public void setFeatureBannerImage(String featureBannerImage) {
+        this.featureBannerImage = featureBannerImage;
+    }
+
+    public String getVideoSrc() {
+        return videoSrc;
+    }
+
+    public void setVideoSrc(String videoSrc) {
+        this.videoSrc = videoSrc;
+    }
+
+    public String getVirtualTourMap() {
+        return virtualTourMap;
+    }
+
+    public void setVirtualTourMap(String virtualTourMap) {
+        this.virtualTourMap = virtualTourMap;
+    }
+
+    public List<String> getImagePaths() {
+        return imagePaths;
+    }
+
+    public void setImagePaths(List<String> imagePaths) {
+        this.imagePaths = imagePaths;
+    }
+
+    public List<String> getAmenities() {
+        return amenities;
+    }
+
+    public void setAmenities(List<String> amenities) {
+        this.amenities = amenities;
+    }
+
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
+    }
+}
