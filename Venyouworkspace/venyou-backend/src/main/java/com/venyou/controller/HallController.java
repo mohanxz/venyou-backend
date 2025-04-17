@@ -1,3 +1,4 @@
+
 package com.venyou.controller;
 
 import com.venyou.dto.HallDTO;
@@ -8,9 +9,9 @@ import com.venyou.service.dto.HallRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,6 @@ public class HallController {
         this.hallService = hallService;
     }
 
-    // Endpoint to fetch all halls
     @GetMapping
     public ResponseEntity<List<HallDTO>> getAllHalls() {
         List<HallDTO> halls = hallService.getAllHalls();
@@ -34,7 +34,6 @@ public class HallController {
         return ResponseEntity.ok(halls);
     }
 
-    // Endpoint to fetch a hall by ID
     @GetMapping("/{id}")
     public ResponseEntity<HallDTO> getHallById(@PathVariable Long id) {
         try {
@@ -45,8 +44,8 @@ public class HallController {
         }
     }
 
-    // Endpoint to create a new hall
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HallDTO> createHall(@RequestBody HallRequest hallRequest) {
         try {
             HallDTO createdHall = hallService.addHall(hallRequest);
@@ -56,8 +55,8 @@ public class HallController {
         }
     }
 
-    // Endpoint to update an existing hall
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<HallDTO> updateHall(@PathVariable Long id, @RequestBody HallRequest hallRequest) {
         try {
             HallDTO updatedHall = hallService.updateHall(id, hallRequest);
@@ -67,8 +66,8 @@ public class HallController {
         }
     }
 
-    // Endpoint to delete a hall by ID
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteHall(@PathVariable Long id) {
         try {
             hallService.deleteHall(id);
@@ -78,8 +77,8 @@ public class HallController {
         }
     }
 
-    // Endpoint to fetch halls by owner
     @GetMapping("/owner/{ownerId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<HallDTO>> getHallsByOwner(@PathVariable Long ownerId) {
         try {
             List<HallDTO> halls = hallService.getHallsByOwner(ownerId);

@@ -1,9 +1,11 @@
+
 package com.venyou.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,6 +21,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -34,13 +37,31 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                // Public endpoints
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("GET", "/api/halls", "/api/halls/**").permitAll()
-                .requestMatchers("/api/bookings/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .requestMatchers("POST", "/api/bookings/check-availability").permitAll()
+                .requestMatchers("GET", "/api/halls", "/api/halls/{id}").permitAll()
+                .requestMatchers("GET", "/api/categories", "/api/categories/{name}").permitAll()
+                .requestMatchers("GET", "/api/brands", "/api/brands/{id}", "/api/brands/name/{name}").permitAll()
+                // Admin endpoints
                 .requestMatchers("POST", "/api/halls").hasAuthority("ROLE_ADMIN")
-                .requestMatchers("PUT", "/api/halls/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers("DELETE", "/api/halls/**").hasAuthority("ROLE_ADMIN")
-                .anyRequest().authenticated()
+                .requestMatchers("PUT", "/api/halls/{id}").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("DELETE", "/api/halls/{id}").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/api/halls/owner/{ownerId}").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/api/categories/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/api/brands/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/api/owners/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/users/**").hasAuthority("ROLE_ADMIN")
+                // User and Admin endpoints
+                .requestMatchers("GET", "/api/bookings/process-due-payments").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/api/bookings/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                // Placeholder controllers
+                .requestMatchers("/api/cancellations/**", "/api/support/**", 
+                                "/api/availability/**", "/api/pricing/**", "/api/invoices/**", 
+                                "/api/notifications/**", "/api/refunds/**", "/api/reviews/**", 
+                                "/api/transactions/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                // Deny all other unauthenticated requests
+                .anyRequest().denyAll()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

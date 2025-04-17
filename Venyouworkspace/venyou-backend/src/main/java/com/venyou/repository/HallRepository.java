@@ -36,7 +36,7 @@ public interface HallRepository extends JpaRepository<Hall, Long> {
     @Query("SELECT h FROM Hall h")
     Page<Hall> findAllHalls(Pageable pageable);
 
-    @Query("SELECT h FROM Hall h " +
+ @Query("SELECT h FROM Hall h " +
            "LEFT JOIN h.category c " +
            "LEFT JOIN h.brand b " +
            "WHERE (:name IS NULL OR LOWER(h.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
@@ -56,7 +56,8 @@ public interface HallRepository extends JpaRepository<Hall, Long> {
            "         SELECT ha FROM HallAvailability ha " +
            "         WHERE ha.hall.hallId = h.hallId " +
            "         AND ha.status = 'BOOKED' " +
-           "         AND ha.date BETWEEN :startDate AND :endDate " +
+           "         AND ha.startDate <= :endDate " +
+           "         AND ha.endDate >= :startDate " +
            "         AND (:startTime IS NULL OR :endTime IS NULL OR " +
            "              (ha.startTime < :endTime AND ha.endTime > :startTime))" +
            "     ))")

@@ -18,16 +18,17 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Override
     public void notifyAdmins(String message) {
         List<User> admins = userRepository.findAll().stream()
-                .filter(user -> "ADMIN".equals(user.getRole()))
+                .filter(user -> user.getRole() == User.Role.ADMIN)
                 .toList();
 
         for (User admin : admins) {
             Notification notification = new Notification();
             notification.setUser(admin);
             notification.setMessage(message);
-            notification.setStatus(Notification.Status.UNREAD); // Use enum
+            notification.setStatus(Notification.Status.UNREAD);
             notificationRepository.save(notification);
         }
     }

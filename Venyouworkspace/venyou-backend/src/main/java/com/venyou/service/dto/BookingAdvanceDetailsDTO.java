@@ -3,9 +3,7 @@ package com.venyou.service.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import com.venyou.model.BookingAdvanceDetails;
-import com.venyou.model.Transaction.PaymentStatus;
 import lombok.Data;
 
 @Data

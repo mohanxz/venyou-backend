@@ -6,6 +6,7 @@ import com.venyou.dto.AuthResponse;
 import com.venyou.dto.RegisterRequest;
 import com.venyou.model.User;
 import com.venyou.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,8 +48,9 @@ public class AuthController {
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getEmail());
-        String jwt = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new AuthResponse(jwt));
+        String accessToken = jwtUtil.generateAccessToken(userDetails);
+        String refreshToken = jwtUtil.generateRefreshToken(userDetails);
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
     }
 
     @PostMapping("/register")
@@ -59,6 +61,9 @@ public class AuthController {
         if (userRepository.existsByAadharNumber(request.getAadharNumber())) {
             return ResponseEntity.badRequest().body("Aadhar number already registered");
         }
+        if (request.isAdmin()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Admin registration is restricted");
+        }
 
         User user = new User();
         user.setName(request.getName());
@@ -66,9 +71,28 @@ public class AuthController {
         user.setPhone(request.getPhone());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         user.setAadharNumber(request.getAadharNumber());
-        user.setRole(request.isAdmin() ? User.Role.ADMIN : User.Role.USER);
+        user.setRole(User.Role.USER);
 
         userRepository.save(user);
         return ResponseEntity.ok("User registered successfully");
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody AuthResponse tokenRequest) {
+        String refreshToken = tokenRequest.getRefreshToken();
+        try {
+            if (!jwtUtil.isRefreshToken(refreshToken)) {
+                return ResponseEntity.badRequest().body("Invalid refresh token");
+            }
+            String email = jwtUtil.extractEmail(refreshToken);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            if (jwtUtil.validateToken(refreshToken, userDetails)) {
+                String newAccessToken = jwtUtil.generateAccessToken(userDetails);
+                return ResponseEntity.ok(new AuthResponse(newAccessToken, refreshToken));
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token refresh failed");
+        }
     }
 }
