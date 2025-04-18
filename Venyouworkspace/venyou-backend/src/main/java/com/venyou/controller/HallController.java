@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -90,7 +91,47 @@ public class HallController {
     }
 
     @GetMapping("/amenities/{hallId}")
-    public ResponseEntity<List<String>> getHallAmenities(@PathVariable Long hallId) {
+public ResponseEntity<List<String>> getHallAmenities(@PathVariable Long hallId) {
+    try {
         return ResponseEntity.ok(hallService.getHallAmenities(hallId));
+    } catch (HallNotFoundException e) {
+        return ResponseEntity.notFound().build();
     }
+}
+    
+    @GetMapping("/filter")
+    public ResponseEntity<List<HallDTO>> filterHalls(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String state,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) Integer minCapacity,
+            @RequestParam(required = false) Integer maxCapacity,
+            @RequestParam(required = false) String categoryName,
+            @RequestParam(required = false) String brandName,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            @RequestParam(required = false) String startTime,
+            @RequestParam(required = false) String endTime,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        List<HallDTO> halls = hallService.filterHalls(
+                name, city, state, address, minPrice, maxPrice, minCapacity, maxCapacity,
+                categoryName, brandName, startDate, endDate, startTime, endTime, page, size
+        );
+        return ResponseEntity.ok(halls);
+    }
+
+    @GetMapping("/cities")
+public ResponseEntity<List<String>> getUniqueCities() {
+    return ResponseEntity.ok(hallService.getUniqueCities());
+}
+
+@GetMapping("/categories")
+public ResponseEntity<List<String>> getUniqueCategories() {
+    return ResponseEntity.ok(hallService.getUniqueCategories());
+}
 }

@@ -7,9 +7,16 @@ import com.venyou.model.*;
 import com.venyou.repository.*;
 import com.venyou.service.HallService;
 import com.venyou.service.dto.HallRequest;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -220,4 +227,65 @@ public class HallServiceImpl implements HallService {
         // Return the amenities list or an empty list if null
         return Optional.ofNullable(hall.getAmenities()).orElse(Collections.emptyList());
     }
+
+    @Override
+public List<HallDTO> filterHalls(
+        String name, String city, String state, String address,
+        BigDecimal minPrice, BigDecimal maxPrice,
+        Integer minCapacity, Integer maxCapacity,
+        String categoryName, String brandName,
+        String startDate, String endDate, String startTime, String endTime,
+        int page, int size) {
+    
+    // Parse date/time if provided
+    LocalDate parsedStartDate = null;
+    LocalDate parsedEndDate = null;
+    LocalTime parsedStartTime = null;
+    LocalTime parsedEndTime = null;
+
+    if (startDate != null && !startDate.isEmpty()) {
+        parsedStartDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+    if (endDate != null && !endDate.isEmpty()) {
+        parsedEndDate = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+    if (startTime != null && !startTime.isEmpty()) {
+        parsedStartTime = LocalTime.parse(startTime, DateTimeFormatter.ofPattern("HH:mm"));
+    } else if (parsedStartDate != null) {
+        parsedStartTime = LocalTime.of(0, 0); // Default to full-day
+    }
+    if (endTime != null && !endTime.isEmpty()) {
+        parsedEndTime = LocalTime.parse(endTime, DateTimeFormatter.ofPattern("HH:mm"));
+    } else if (parsedEndDate != null) {
+        parsedEndTime = LocalTime.of(23, 59); // Default to full-day
+    }
+
+    // Call repository method with proper parameters
+    Page<Hall> hallPage = hallRepository.findHallsByFilters(
+            name, city, state, address,
+            minPrice, maxPrice,
+            minCapacity, maxCapacity,
+            categoryName, brandName,
+            parsedStartDate, parsedEndDate,
+            parsedStartTime, parsedEndTime,
+            PageRequest.of(page, size)
+    );
+
+    // Convert to DTO
+    return hallPage.getContent()
+            .stream()
+            .map(hall -> new HallDTO(hall))
+            .collect(Collectors.toList());
+}
+
+@Override
+public List<String> getUniqueCities() {
+    return hallRepository.findDistinctCities();
+}
+
+@Override
+public List<String> getUniqueCategories() {
+    return hallRepository.findDistinctCategories();
+}
+
 }

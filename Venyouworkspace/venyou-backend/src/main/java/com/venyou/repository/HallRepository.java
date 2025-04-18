@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,4 +35,50 @@ public interface HallRepository extends JpaRepository<Hall, Long> {
     // Fetch halls with pagination
     @Query("SELECT h FROM Hall h")
     Page<Hall> findAllHalls(Pageable pageable);
+    
+    @Query("SELECT DISTINCT h.city FROM Hall h")
+List<String> findDistinctCities();
+
+@Query("SELECT DISTINCT c.categoryName FROM Hall h JOIN h.category c")
+List<String> findDistinctCategories();
+
+    @Query("SELECT h FROM Hall h LEFT JOIN h.category c LEFT JOIN h.brand b " +
+    "WHERE (:name IS NULL OR LOWER(h.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
+    "AND (:city IS NULL OR LOWER(h.city) LIKE LOWER(CONCAT('%', :city, '%'))) " +
+    "AND (:state IS NULL OR LOWER(h.state) LIKE LOWER(CONCAT('%', :state, '%'))) " +
+    "AND (:address IS NULL OR LOWER(h.addressLine1) LIKE LOWER(CONCAT('%', :address, '%')) OR " +
+    "     LOWER(h.addressLine2) LIKE LOWER(CONCAT('%', :address, '%'))) " +
+    "AND (:minPrice IS NULL OR h.price >= :minPrice) " +
+    "AND (:maxPrice IS NULL OR h.price <= :maxPrice) " +
+    "AND (:minCapacity IS NULL OR h.capacity >= :minCapacity) " +
+    "AND (:maxCapacity IS NULL OR h.capacity <= :maxCapacity) " +
+    "AND (:categoryName IS NULL OR c.categoryName = :categoryName) " +
+    "AND (:brandName IS NULL OR LOWER(b.name) LIKE LOWER(CONCAT('%', :brandName, '%'))) " +
+    "AND (:startDate IS NULL OR :endDate IS NULL OR " +
+    "     NOT EXISTS (" +
+    "         SELECT ha FROM HallAvailability ha " +
+    "         WHERE ha.hall.hallId = h.hallId " +
+    "         AND ha.status = 'BOOKED' " +
+    "         AND ha.startDate <= :endDate " +
+    "         AND ha.endDate >= :startDate " +
+    "         AND (:startTime IS NULL OR :endTime IS NULL OR " +
+    "             (ha.startTime < :endTime AND ha.endTime > :startTime))" +
+    "     ))")
+Page<Hall> findHallsByFilters(
+     @Param("name") String name,
+     @Param("city") String city,
+     @Param("state") String state,
+     @Param("address") String address,
+     @Param("minPrice") BigDecimal minPrice,
+     @Param("maxPrice") BigDecimal maxPrice,
+     @Param("minCapacity") Integer minCapacity,
+     @Param("maxCapacity") Integer maxCapacity,
+     @Param("categoryName") String categoryName,
+     @Param("brandName") String brandName,
+     @Param("startDate") LocalDate startDate,
+     @Param("endDate") LocalDate endDate,
+     @Param("startTime") LocalTime startTime,
+     @Param("endTime") LocalTime endTime,
+     Pageable pageable);
+
 }

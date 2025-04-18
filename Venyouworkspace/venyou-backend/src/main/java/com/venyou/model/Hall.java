@@ -166,30 +166,30 @@ public class Hall {
         DRAFT
     }
 
-    public void updateAverageRating() {
-        if (reviews != null && !reviews.isEmpty()) {
-            this.averageRating = reviews.stream()
-                    .mapToInt(Review::getRating)
-                    .average()
-                    .orElse(0.0);
-        } else {
-            this.averageRating = 0.0;
-        }
-    }
+    // public void updateAverageRating() {
+    //     if (reviews != null && !reviews.isEmpty()) {
+    //         this.averageRating = reviews.stream()
+    //                 .mapToInt(Review::getRating)
+    //                 .average()
+    //                 .orElse(0.0);
+    //     } else {
+    //         this.averageRating = 0.0;
+    //     }
+    // }
 
-    public void addAmenity(String amenity) {
-        if (amenity != null && !amenity.trim().isEmpty()) {
-            List<String> updatedAmenities = new ArrayList<>(Optional.ofNullable(getAmenities()).orElse(List.of()));
-            updatedAmenities.add(amenity.trim());
-            setAmenities(updatedAmenities.stream().distinct().collect(Collectors.toList()));
-        }
-    }
+    // public void addAmenity(String amenity) {
+    //     if (amenity != null && !amenity.trim().isEmpty()) {
+    //         List<String> updatedAmenities = new ArrayList<>(Optional.ofNullable(getAmenities()).orElse(List.of()));
+    //         updatedAmenities.add(amenity.trim());
+    //         setAmenities(updatedAmenities.stream().distinct().collect(Collectors.toList()));
+    //     }
+    // }
 
-    public void removeAmenity(String amenity) {
-        if (amenity != null && !amenity.trim().isEmpty()) {
-            setAmenities(getAmenities().stream()
-                    .filter(a -> !a.equalsIgnoreCase(amenity.trim()))
-                    .collect(Collectors.toList()));
-        }
-    }
+    // public void removeAmenity(String amenity) {
+    //     if (amenity != null && !amenity.trim().isEmpty()) {
+    //         setAmenities(getAmenities().stream()
+    //                 .filter(a -> !a.equalsIgnoreCase(amenity.trim()))
+    //                 .collect(Collectors.toList()));
+    //     }
+    // }
 }
